@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { db, seeDataBase } from '../../database';
-import { Product } from '../../models';
+import { Product, User } from '../../models';
+
 
 type Data = {
   message: string
@@ -14,6 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     await db.connect();
     await Product.deleteMany();
     await Product.insertMany(seeDataBase.initialData.products);
+    await User.deleteMany();
+    await User.insertMany(seeDataBase.initialData.users);
     await db.disconnect();
 
     return res.status(200).json({ message: 'Process carried out successfully. ' });

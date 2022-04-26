@@ -6,6 +6,7 @@ interface Props {
   title: string;
   pageDescription: string;
   imageFullUrl?: string;
+  children?: React.ReactNode | undefined;
 }
 
 export const ShopLayout: FC<Props> = ({ children, title, pageDescription, imageFullUrl }) => {

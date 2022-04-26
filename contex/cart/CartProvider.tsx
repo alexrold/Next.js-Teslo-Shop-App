@@ -19,7 +19,11 @@ const CART_INITIAL_STATE: CartState = {
   total: 0,
 };
 
-export const CartProvider: FC = ({ children }) => {
+interface Props {
+  children?: React.ReactNode | undefined;
+}
+
+export const CartProvider: FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE);
 
   useEffect(() => {
