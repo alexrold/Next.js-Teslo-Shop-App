@@ -32,7 +32,6 @@ export const CartProvider: FC<Props> = ({ children }) => {
       dispatch({ type: '[CART] - LoadCart for Cookies | Storage', payload: cookieCart });
     } catch (error) {
       dispatch({ type: '[CART] - LoadCart for Cookies | Storage', payload: [] });
-      console.log('hola');
     }
   }, []);
 
