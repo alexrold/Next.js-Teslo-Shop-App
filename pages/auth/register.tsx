@@ -33,7 +33,8 @@ const RegisterPage = () => {
       setTimeout(() => { setShowErrorRegister(false) }, 3000);
       return;
     }
-    router.replace('/');
+    const origin = router.query.origin?.toString() || '/';
+    router.replace(origin);
   }
 
   return (
@@ -127,7 +128,7 @@ const RegisterPage = () => {
             </Grid>
 
             <Grid item xs={12} display='flex' justifyContent='end' >
-              <RedirectEdit href={'/auth/login'} msg='¿Ya tienes cuenta?, ingresa aquí' />
+              <RedirectEdit href={router.query.origin ? `/auth/login?origin=${router.query.origin}` : `/auth/login`} msg='¿Ya tienes cuenta?, ingresa aquí' />
             </Grid>
 
           </Grid>

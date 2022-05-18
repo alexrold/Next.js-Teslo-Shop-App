@@ -22,6 +22,7 @@ const LoginPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
   const [showErrorLogin, setShowErrorLogin] = useState(false);
 
+
   const onLoginUser = async ({ email, password }: FormData) => {
     setShowErrorLogin(false);
     const isValidLogin = await loginUser(email, password);
@@ -30,7 +31,8 @@ const LoginPage = () => {
       setTimeout(() => { setShowErrorLogin(false) }, 3000);
       return;
     }
-    router.replace('/');
+    const origin = router.query.origin?.toString() || '/';
+    router.replace(origin);
   };
 
 
@@ -95,7 +97,7 @@ const LoginPage = () => {
             </Grid>
 
             <Grid item xs={12} display='flex' justifyContent='end'  >
-              <RedirectEdit href={'/auth/register'} msg='¿No tienes una cuenta?' />
+              <RedirectEdit href={router.query.origin ? `/auth/register?origin=${router.query.origin}` : `/auth/register`} msg='¿No tienes una cuenta?' />
             </Grid>
 
           </Grid>

@@ -32,7 +32,6 @@ export const validateToken = (token: string): Promise<string> => {
         }
       });
     } catch (error) {
-      console.log(error);
       return reject('not valid token');
     }
   })

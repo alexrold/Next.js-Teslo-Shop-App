@@ -1,4 +1,5 @@
 import { FC, useEffect, useReducer } from 'react';
+import { useRouter } from 'next/router';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { tesloShopApi } from '../../api';
@@ -21,21 +22,35 @@ interface Props {
 
 export const AuthProvider: FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE);
+  const router = useRouter();
 
   useEffect(() => {
     checkToken();
   }, []);
 
   const checkToken = async () => {
+    // si no hay token en coockie 
+    if (!Cookies.get('token')) {
+      return;
+    }
+
     try {
       const { data } = await tesloShopApi.get('/user/validate');
       const { token, user } = data;
       Cookies.set('token', token);
       dispatch({ type: '[AUTH] - Login', payload: user });
-      console.log({ user });
+      return;
     } catch (error) {
       return Cookies.remove('token');
     }
+  }
+
+  // logout
+  const logout = () => {
+    Cookies.remove('token');
+    Cookies.remove('cart');
+    dispatch({ type: '[AUTH] - Logout' });
+    router.reload();
   }
 
   // loginUser
@@ -83,6 +98,7 @@ export const AuthProvider: FC<Props> = ({ children }) => {
 
         // Methods
         loginUser,
+        logout,
         registerUser,
       }}
     >
