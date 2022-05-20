@@ -1,5 +1,7 @@
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
-import { useContext } from 'react';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
+import { useContext, useEffect, useState } from 'react';
 import { CartList, OrderSumary } from '../../components/cart';
 import { ShopLayout } from '../../components/layout';
 import { RedirectEdit } from '../../components/ui';
@@ -8,10 +10,20 @@ import { countries } from '../../utils/countries';
 
 const SummaryPage = () => {
   const { shippingAddress, numberOfItem } = useContext(CartContext);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!Cookies.get('firstName')) {
+      router.push('/checkout/address');
+    }
+  }, [router]);
+
   if (!shippingAddress) {
     return <></>;
   }
-  const { firsName,
+
+  const {
+    firstName,
     lastName,
     address,
     address2 = '',
@@ -41,7 +53,7 @@ const SummaryPage = () => {
               <RedirectEdit href={'/checkout/address'} />
 
               <Typography variant='subtitle1' >Información de entrega</Typography>
-              <Typography >{firsName} {lastName}</Typography>
+              <Typography >{firstName} {lastName}</Typography>
               <Typography >{phone2 ? 'Telefonos:' : 'Telefono:'} <strong>{phone} {phone2 ? `, ${phone2}` : ''} </strong> </Typography>
               <Typography > <strong> {city}, {address}{address2 ? `, ${address2}` : ''}</strong> </Typography>
               <Typography >{provinceOrState}</Typography>

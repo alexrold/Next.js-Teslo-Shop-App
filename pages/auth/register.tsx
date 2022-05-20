@@ -1,4 +1,6 @@
 import { useContext, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { getSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { Box, Button, Chip, Grid, TextField, Typography } from '@mui/material';
 import { ErrorOutline } from '@mui/icons-material';
@@ -33,8 +35,10 @@ const RegisterPage = () => {
       setTimeout(() => { setShowErrorRegister(false) }, 3000);
       return;
     }
-    const origin = router.query.origin?.toString() || '/';
-    router.replace(origin);
+    await signIn('credentials', { email, password });
+
+    // const origin = router.query.origin?.toString() || '/';
+    // router.replace(origin);
   }
 
   return (
@@ -137,4 +141,26 @@ const RegisterPage = () => {
     </AuthLayout>
   )
 }
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+  const session = await getSession({ req });
+  const { origin = '/' } = query;
+
+  if (session) {
+    return {
+      redirect: {
+        destination: origin.toString(),
+        permanent: false,
+      }
+    }
+  }
+
+  return {
+    props: {}
+  }
+}
+
+
 export default RegisterPage

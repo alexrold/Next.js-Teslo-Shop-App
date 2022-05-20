@@ -1,15 +1,15 @@
-import { Box, Button, FormControl, Grid, MenuItem, TextField, Typography } from '@mui/material';
+import { Box, Button, FormControl, FormHelperText, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { CartContext } from '../../contex';
 import { countries } from '../../utils';
 import { ShopLayout } from '../../components/layout';
 
 
 type FormData = {
-  firsName: string;
+  firstName: string;
   lastName: string;
   address: string;
   address2?: string;
@@ -23,7 +23,7 @@ type FormData = {
 
 const getAddreeeFromCookies = (): FormData => {
   return {
-    firsName: Cookies.get('firsName') || '',
+    firstName: Cookies.get('firstName') || '',
     lastName: Cookies.get('lastName') || '',
     address: Cookies.get('address') || '',
     address2: Cookies.get('address2') || '',
@@ -39,9 +39,10 @@ const getAddreeeFromCookies = (): FormData => {
 const AddressPage = () => {
   const router = useRouter();
   const { updateAddress } = useContext(CartContext);
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-    defaultValues: getAddreeeFromCookies()
+  const { control, register, handleSubmit, formState: { errors }, } = useForm<FormData>({
+    defaultValues: { ...getAddreeeFromCookies() }
   });
+
 
   const onSubmitAddress = (data: FormData) => {
     updateAddress(data);
@@ -65,11 +66,11 @@ const AddressPage = () => {
               variant='filled'
               fullWidth
 
-              {...register('firsName', {
+              {...register('firstName', {
                 required: 'Este campo es requerido. '
               })}
-              error={!!errors.firsName}
-              helperText={errors.firsName?.message}
+              error={!!errors.firstName}
+              helperText={errors.firstName?.message}
 
             />
 
@@ -124,32 +125,35 @@ const AddressPage = () => {
         <Typography sx={{ textAlign: 'start', mt: 3, fontWeight: '700' }} variant='subtitle2' component='h4'>Direccion de envio</Typography>
         <Grid container spacing={2} >
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth>
 
-              <TextField
-                select
-                variant='filled'
-                label='País'
-                defaultValue={Cookies.get('country') || countries[0].code}
-                {...register('country', {
-                  required: 'Este campo es requerido. '
-                })}
-                error={!!errors.country}
-                helperText={errors.country?.message}
-              >
-                {
-                  countries.map(countrie => (
-                    <MenuItem
-                      key={countrie.code}
-                      value={countrie.code}
-                    >
-                      {countrie.name}
-                    </MenuItem>
-                  ))
-                }
-              </TextField>
+            <Controller
+              name="country"
+              control={control}
+              defaultValue={'Pais'}
+              render={({ field }) => (
+                <FormControl fullWidth >
+                  <InputLabel>{!field.value ? 'Pais' : null}</InputLabel>
+                  <Select
+                    {...field}
+                    variant='filled'
+                    label='País'
+                    fullWidth
+                    {...register('country', {
+                      required: 'Este campo es requerido. '
+                    })}
+                    error={!!errors.country}
+                  >
+                    {countries.map((country) => (
+                      <MenuItem key={country.code} value={country.code}>
+                        {country.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText error={true} >{errors.country?.message}</FormHelperText>
+                </FormControl>
+              )}
+            />
 
-            </FormControl>
           </Grid>
           <Grid item xs={12} sm={6} >
 
