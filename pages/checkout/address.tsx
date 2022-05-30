@@ -50,10 +50,9 @@ const AddressPage = () => {
   }
 
   return (
-    <ShopLayout title='Dirección' pageDescription='Confirmar información de envio '>
+    <ShopLayout title='Dirección' pageDescription='Cnfirmar información de envio '>
 
       <form onSubmit={handleSubmit(onSubmitAddress)} >
-
         <Typography sx={{ textAlign: 'center', mb: 1 }} variant='h1' component='h1'> Información de envio </Typography>
 
         {/* Persona  */}
@@ -129,7 +128,7 @@ const AddressPage = () => {
             <Controller
               name="country"
               control={control}
-              defaultValue={'Pais'}
+              // defaultValue={'Pais'}
               render={({ field }) => (
                 <FormControl fullWidth >
                   <InputLabel>{!field.value ? 'Pais' : null}</InputLabel>

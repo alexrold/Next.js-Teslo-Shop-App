@@ -4,25 +4,29 @@ import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from '
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import { ItemCounter } from '../ui';
 import { CartContext } from '../../contex';
-import { ICartProduct } from '../../interfaces';
+import { ICartProduct, IOrderItem } from '../../interfaces';
 
 
 interface Props {
   editable?: boolean;
+  products?: IOrderItem[];
 }
 const limite = 5;
 
-export const CartList: FC<Props> = ({ editable = false }) => {
+export const CartList: FC<Props> = ({ editable = false, products }) => {
   const { cart, updateCartQuantity, removeCartProduct } = useContext(CartContext);
 
   const onUpdateQuantityProductInCart = (product: ICartProduct, updateValue: number) => {
     product.quantity = updateValue;
     updateCartQuantity(product);
   }
+
+  const productToShow = products ? products : cart;
+
   return (
     <>
       {
-        cart.map((product) => (
+        productToShow.map((product) => (
           <Grid container spacing={2} sx={{ my: 1 }} key={product.slug + product.size}>
             <Grid item xs={3}>
               {/* Llevar a la pagina del producto */}
@@ -50,7 +54,7 @@ export const CartList: FC<Props> = ({ editable = false }) => {
                       <ItemCounter
                         currentValue={product.quantity}
                         maxValue={10}
-                        updateQuantity={(value) => onUpdateQuantityProductInCart(product, value)}
+                        updateQuantity={(value) => onUpdateQuantityProductInCart(product as ICartProduct, value)}
                       />
                     )
                     : (
@@ -70,7 +74,7 @@ export const CartList: FC<Props> = ({ editable = false }) => {
                   <Button
                     variant='text'
                     color='error'
-                    onClick={() => removeCartProduct(product)}
+                    onClick={() => removeCartProduct(product as ICartProduct)}
                   >
                     <DeleteForeverOutlinedIcon />
                     <Typography>Remover</Typography>

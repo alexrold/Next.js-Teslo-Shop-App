@@ -8,7 +8,7 @@ import { CartContext, UiContext } from '../../contex';
 export const Navbar = () => {
   const { pathname, push } = useRouter();
   const { togglesidMenu } = useContext(UiContext);
-  const { numberOfItem } = useContext(CartContext);
+  const { numberOfItems } = useContext(CartContext);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -105,7 +105,7 @@ export const Navbar = () => {
         <NextLink href='/cart' passHref>
           <Link>
             <IconButton>
-              <Badge badgeContent={numberOfItem > 9 ? '+9' : numberOfItem} color='secondary' >
+              <Badge badgeContent={numberOfItems > 9 ? '+9' : numberOfItems} color='secondary' >
                 <ShoppingCartOutlined />
               </Badge>
             </IconButton>

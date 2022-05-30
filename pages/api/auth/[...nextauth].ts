@@ -16,7 +16,6 @@ export default NextAuth({
       },
 
       async authorize(credentials) {
-        console.log('authorize', credentials);
         return dbUser.checkUserEmailAndPassword(credentials!.email, credentials!.password);
       }
     }),
@@ -61,7 +60,6 @@ export default NextAuth({
     },
 
     async session({ session, user, token }) {
-      // console.log('session:', session, user, token);
       session.access_token = token.access_token;
       session.user = token.user as any;
 

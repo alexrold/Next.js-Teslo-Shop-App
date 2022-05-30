@@ -1,5 +1,5 @@
 export interface IOrderCartSumary {
-  numberOfItem: number;
+  numberOfItems: number;
   subTotal: number;
   tax: number;
   total: number;
