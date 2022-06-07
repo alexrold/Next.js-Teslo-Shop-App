@@ -114,6 +114,7 @@ const LoginPage = () => {
               <Divider sx={{ with: '100%', mb: 2 }} />
               {
                 Object.values(providers).map((provider: any) => {
+
                   if (provider.id === 'credentials') return (<div key={provider.id} />);
                   return (
                     <Button

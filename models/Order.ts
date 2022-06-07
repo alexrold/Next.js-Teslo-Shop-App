@@ -3,6 +3,7 @@ import { IOrder } from '../interfaces';
 
 const orderSchema: Schema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+
   orderItems: [{
     _id: { type: Schema.Types.ObjectId, ref: 'Product' },
     title: { type: String, required: true },
@@ -13,6 +14,7 @@ const orderSchema: Schema = new Schema({
     price: { type: Number, required: true },
     gender: { type: String, required: true },
   }],
+
   shippingAddress: {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -25,6 +27,7 @@ const orderSchema: Schema = new Schema({
     provinceOrState: { type: String, required: true },
     city: { type: String, required: true },
   },
+
   numberOfItems: { type: Number },
   subTotal: { type: Number, required: true },
   taxRate: { type: String, required: true },
@@ -32,8 +35,11 @@ const orderSchema: Schema = new Schema({
   total: { type: Number, required: true },
   isPaid: { type: Boolean, required: true, default: false },
   paidAt: { type: String },
-}, {
-  timestamps: true,
-})
+  transactionId: { type: String },
+},
+  // model options
+  {
+    timestamps: true,
+  })
 const Order: Model<IOrder> = mongoose.models.Order || model('Order', orderSchema);
 export default Order;

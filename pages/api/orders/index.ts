@@ -4,7 +4,6 @@ import { getSession } from 'next-auth/react';
 import { db } from '../../../database';
 import { Order, Product } from '../../../models';
 
-
 type Data =
   | { message: string }
   | IOrder
@@ -33,7 +32,6 @@ const createOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   await db.connect();
   const dbProducts = await Product.find({ _id: { $in: productIds } });
 
-
   try {
     // calculate order subtotal by data base product price
     const subTotal = orderItems.reduce((prev, current) => {
@@ -60,6 +58,8 @@ const createOrder = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
       isPaid: false,
       user: session.user._id.toString(),
     });
+    // two decimals for total
+    newOrder.total = Math.round(newOrder.total * 100) / 100;
     // save order
     await newOrder.save();
     await db.disconnect();

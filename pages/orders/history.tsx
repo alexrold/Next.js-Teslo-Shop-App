@@ -6,7 +6,7 @@ import { DataGrid, GridColDef, GridRowsProp, GridValueGetterParams } from '@mui/
 import { ShopLayout } from '../../components/layout/ShopLayout';
 import { dbOrders } from '../../database';
 import { IOrder } from '../../interfaces/order';
-
+import EmptyOrderPage from './empty';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 100 },
@@ -54,6 +54,10 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
     fullname: `${order.shippingAddress.firstName} ${order.shippingAddress.lastName}`,
     orderId: order._id,
   }))
+
+  if (orders.length === 0) {
+    return (<EmptyOrderPage />)
+  }
 
   return (
     <ShopLayout title={'Historial de ordenes'} pageDescription={'Historial de ordenes del cliente'}>
