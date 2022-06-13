@@ -5,11 +5,7 @@ import { Product } from '../../../models';
 
 type Data =
   | { message: string }
-<<<<<<< HEAD
   | IProduct[]
-=======
-  | { message: string, data: IProduct[] }
->>>>>>> 75c1396 (Fin secion 14)
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   switch (req.method) {
@@ -30,7 +26,6 @@ const searchProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) =
 
   try {
     await db.connect();
-<<<<<<< HEAD
     const products = await Product.find({ $text: { $search: q } })
       .select('title images price inStock slug -_id')
       .lean();
@@ -39,16 +34,6 @@ const searchProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) =
       return res.status(404).json({ message: 'product not found' });
     }
     return res.status(200).json(products);
-=======
-    const product = await Product.find({ $text: { $search: q } })
-      .select('title image price inStock slug -_id')
-      .lean();
-    await db.disconnect();
-    if (!product) {
-      return res.status(404).json({ message: 'product not found' });
-    }
-    return res.status(200).json({ message: 'success', data: product });
->>>>>>> 75c1396 (Fin secion 14)
 
   } catch (error) {
     console.log(error);
