@@ -10,6 +10,12 @@ export const getProductBySlug = async (slug: string): Promise<IProduct | null> =
   if (!product) {
     return null
   }
+
+  //processing images url from uploads server
+  product.images = product.images.map(image => {
+    return image.includes('http') ? image : `${process.env.HOST_NAME}/products/${image}`
+  });
+
   return JSON.parse(JSON.stringify(product));
 }
 
@@ -34,15 +40,31 @@ export const getProductsByTerm = async (term: string): Promise<IProduct[]> => {
     .select('title images price inStock slug -_id')
     .lean();
   await db.disconnect();
-  return products;
+
+  //processing images url from uploads server
+  const updateProducts = products.map(product => {
+    product.images = product.images.map(image => {
+      return image.includes('http') ? image : `${process.env.HOST_NAME}/products/${image}`
+    });
+    return product;
+  })
+
+  return updateProducts;
 }
 
 //* Get All Products
 export const getAllProducts = async (): Promise<IProduct[]> => {
   await db.connect();
-  const products = await Product.find()
-    // .select('title images price inStock slug -_id')
-    .lean();
+  const products = await Product.find().lean();
   await db.disconnect();
-  return JSON.parse(JSON.stringify(products));
+
+  //processing images url from uploads server
+  const updateProducts = products.map(product => {
+    product.images = product.images.map(image => {
+      return image.includes('http') ? image : `${process.env.HOST_NAME}/products/${image}`
+    });
+    return product;
+  })
+
+  return JSON.parse(JSON.stringify(updateProducts));
 }

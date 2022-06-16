@@ -29,7 +29,9 @@ const getProduct = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     const products = await Product.find(condition)
       .select('title image price inStock slug -_id')
       .lean();
+
     await db.disconnect();
+
     return res.status(200).json({ message: 'success', data: products });
 
   } catch (error) {
@@ -37,6 +39,4 @@ const getProduct = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     await db.disconnect();
     return res.status(500).json({ message: 'server error' });
   }
-
-
 }

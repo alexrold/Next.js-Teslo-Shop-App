@@ -26,6 +26,8 @@ const getProductBySlug = async (req: NextApiRequest, res: NextApiResponse<Data>)
     if (!product) {
       return res.status(404).json({ message: 'product not found' });
     }
+
+
     return res.status(200).json({ message: 'success', data: product });
 
   } catch (error) {
